@@ -84,9 +84,18 @@ export default function DrawerLayout() {
       <Drawer
         screenOptions={{
           drawerActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-          headerShown: true, 
+          headerShown: true,
         }}
       >
+        <Drawer.Screen
+          name="(tabs)"
+          options={{
+            title: 'Vico Tabs',
+            drawerIcon: ({ color, size }) => (
+              <IconSymbol size={size ?? 24} name="house.fill" color={color} />
+            ),
+          }}
+        />
         <Drawer.Screen
           name="index"
           options={{
@@ -108,7 +117,7 @@ export default function DrawerLayout() {
         <Drawer.Screen
           name="new_tab"
           options={{
-            title: 'New Tab',
+            title: 'Vico',
             drawerIcon: ({ color, size }) => (
               <IconSymbol size={size ?? 24} name="house.fill" color={color} />
             ),
