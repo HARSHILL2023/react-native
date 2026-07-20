@@ -19,5 +19,5 @@
     "**/*.tsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts"
-  ]
+, "app/(drawer)/(tabs)/contact.jsx", "app/(drawer)/(tabs)/clipbaord.jsx"  ]
 }

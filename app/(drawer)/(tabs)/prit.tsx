@@ -28,7 +28,7 @@ const Profile = () => {
           onPress={handleFollow}
           android_ripple={{
             color: "rgba(55, 255, 0, 0.6)",
-            borderless: false,
+            borderless: false,  
             foreground: true,
           }}
           style={styles.button}

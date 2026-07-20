@@ -119,7 +119,7 @@ function reducer(state: State, action: Action): State {
 function Home() {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  return (
+  return (  
     <View style={styles.container}>
       <Text style={{ fontSize: 40, marginBottom: 30 }}>FORM</Text>
 
