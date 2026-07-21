@@ -1,7 +1,8 @@
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
 import { useRef, useState } from 'react';
-import { ActivityIndicator, Button, Image, StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
+import { ActivityIndicator, Image, StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
+import { Camera as CameraIcon, FlipHorizontal2, ImagePlus, RefreshCcw } from 'lucide-react-native';
 
 export default function CameraScreen() {
   const [facing, setFacing] = useState('back');
@@ -22,14 +23,22 @@ export default function CameraScreen() {
   }
 
   if (!permission.granted || !mediaPermission?.granted) {
-    // Camera or Media permissions are not granted yet.
     return (
-      <View style={styles.container}>
-        <Text style={styles.message}>We need your permission to show the camera and save photos</Text>
-        <Button onPress={async () => {
-          await requestPermission();
-          await requestMediaPermission();
-        }} title="Grant Permissions" />
+      <View style={styles.permissionContainer}>
+        <View style={styles.permissionCard}>
+          <CameraIcon size={36} color="#2563eb" />
+          <Text style={styles.permissionTitle}>Camera access needed</Text>
+          <Text style={styles.permissionText}>We need your permission to show the camera and save photos.</Text>
+          <TouchableOpacity
+            style={styles.permissionButton}
+            onPress={async () => {
+              await requestPermission();
+              await requestMediaPermission();
+            }}
+          >
+            <Text style={styles.permissionButtonText}>Grant Permissions</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }
@@ -75,12 +84,12 @@ export default function CameraScreen() {
     return (
       <View style={styles.container}>
         <Image source={{ uri: photo }} style={styles.preview} />
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={[styles.button, { marginBottom: 15 }]} onPress={savePhoto}>
-            {isProcessing ? <ActivityIndicator color="white" /> : <Text style={styles.text}>Save to Gallery</Text>}
+        <View style={styles.previewOverlay}>
+          <TouchableOpacity style={styles.previewButton} onPress={savePhoto}>
+            {isProcessing ? <ActivityIndicator color="white" /> : <ImagePlus size={20} color="#fff" />}
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={() => setPhoto(null)}>
-            <Text style={styles.text}>Take Another</Text>
+          <TouchableOpacity style={styles.previewButton} onPress={() => setPhoto(null)}>
+            <RefreshCcw size={20} color="#fff" />
           </TouchableOpacity>
         </View>
       </View>
@@ -94,7 +103,7 @@ export default function CameraScreen() {
       {/* Overlay action buttons using absolute positioning */}
       <View style={styles.cameraActionContainer}>
         <TouchableOpacity style={styles.iconButton} onPress={toggleCameraFacing}>
-          <Text style={styles.text}>Flip</Text>
+          <FlipHorizontal2 size={20} color="#fff" />
         </TouchableOpacity>
         <TouchableOpacity style={styles.captureButton} onPress={takePicture}>
           {isProcessing ? (
@@ -113,7 +122,48 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    backgroundColor: 'black',
+    backgroundColor: '#0f172a',
+  },
+  permissionContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f8fafc',
+    padding: 24,
+  },
+  permissionCard: {
+    width: '100%',
+    backgroundColor: '#fff',
+    borderRadius: 24,
+    padding: 24,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.08,
+    shadowRadius: 18,
+    elevation: 4,
+  },
+  permissionTitle: {
+    fontSize: 20,
+    fontWeight: '800',
+    color: '#0f172a',
+    marginTop: 12,
+  },
+  permissionText: {
+    textAlign: 'center',
+    color: '#64748b',
+    marginTop: 8,
+    marginBottom: 16,
+  },
+  permissionButton: {
+    backgroundColor: '#2563eb',
+    paddingHorizontal: 18,
+    paddingVertical: 12,
+    borderRadius: 14,
+  },
+  permissionButtonText: {
+    color: '#fff',
+    fontWeight: '700',
   },
   message: {
     textAlign: 'center',
@@ -126,6 +176,20 @@ const styles = StyleSheet.create({
   preview: {
     flex: 1,
     width: '100%',
+  },
+  previewOverlay: {
+    position: 'absolute',
+    bottom: 36,
+    right: 24,
+    gap: 10,
+  },
+  previewButton: {
+    width: 50,
+    height: 50,
+    borderRadius: 16,
+    backgroundColor: 'rgba(15, 23, 42, 0.75)',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   cameraActionContainer: {
     position: 'absolute',
@@ -150,8 +214,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   iconButton: {
-    padding: 10,
-    backgroundColor: 'rgba(0,0,0,0.5)',
+    padding: 12,
+    backgroundColor: 'rgba(15, 23, 42, 0.75)',
     borderRadius: 50,
   },
   text: {
@@ -160,18 +224,20 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   captureButton: {
-    width: 70,
-    height: 70,
-    borderRadius: 35,
-    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    width: 74,
+    height: 74,
+    borderRadius: 37,
+    backgroundColor: 'rgba(255, 255, 255, 0.25)',
     justifyContent: 'center',
     alignItems: 'center',
+    borderWidth: 3,
+    borderColor: '#fff',
   },
   captureButtonInner: {
     width: 60,
     height: 60,
     borderRadius: 30,
-    backgroundColor: 'white',
+    backgroundColor: '#fff',
   },
   placeholder: {
     width: 50,
