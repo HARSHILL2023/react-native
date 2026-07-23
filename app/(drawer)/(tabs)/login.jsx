@@ -1,132 +1,179 @@
-import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
-import React, { useState } from 'react';
-import * as SecureStore from 'expo-secure-store';
-import { router } from 'expo-router';
-import { Lock, UserRound, Sparkles } from 'lucide-react-native';
+import React, { useState } from 'react'
+import {
+  Alert,
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  TouchableOpacity,
+} from 'react-native'
+import { router } from 'expo-router'
+import * as SecureStore from 'expo-secure-store'
+import * as LocalAuthentication from 'expo-local-authentication'
 
 const Login = () => {
-  const [name, setName] = useState('');
-  const [password, setPassword] = useState('');
+  const [name, setName] = useState('')
+  const [password, setPassword] = useState('')
 
   const handleLogin = async () => {
-    if (name.trim() === 'harshil' && password === '12345') {
-      await SecureStore.setItemAsync('education', 'Dharmandra_Pradhan');
-      router.replace('/home');
-    } else {
-      alert('Invalid Credentials');
+    if (name === 'harshil' && password === '123456') {
+      await SecureStore.setItemAsync('token', 'Bharat')
+      Alert.alert('login sucessfully', 'user is loggged in')
+      router.replace("/home")
+      return
     }
-  };
+
+    Alert.alert('Invalid credentials', 'Something Went wrong')
+  }
+
+  const handleBiometricLogin = async () => {
+    const token = await SecureStore.getItemAsync('token')
+    if (!token) {
+      Alert.alert('No saved login', 'Please log in with credentials first.')
+      return
+    }
+
+    const hasHardware = await LocalAuthentication.hasHardwareAsync()
+    const isEnrolled = await LocalAuthentication.isEnrolledAsync()
+
+    if (!hasHardware || !isEnrolled) {
+      Alert.alert('Biometrics unavailable', 'Your device does not support biometric login.')
+      return
+    }
+
+    const result = await LocalAuthentication.authenticateAsync({
+      promptMessage: 'Login with biometrics',
+      cancelLabel: 'Cancel' ,
+      fallbackLabel: 'Use Passcode',
+    })
+
+    if (result.success) {
+      Alert.alert('Login successful', 'Biometric authentication passed.')
+      router.replace("/home")
+      return
+    }
+
+    Alert.alert('Authentication failed', 'Please try again.')
+  }
 
   return (
     <View style={styles.container}>
       <View style={styles.card}>
-        <View style={styles.iconWrap}>
-          <Sparkles size={24} color="#2563eb" />
-        </View>
-        <Text style={styles.heading}>Welcome Back</Text>
-        <Text style={styles.subText}>Sign in to continue your premium experience.</Text>
+        <Text style={styles.title}>Login</Text>
+        <Text style={styles.subtitle}>Enter your credentials to continue</Text>
 
-        <View style={styles.inputWrap}>
-          <UserRound size={18} color="#64748b" />
+        <View style={styles.inputGroup}>
+          <Text style={styles.label}>Username</Text>
           <TextInput
             style={styles.input}
-            placeholder="Enter Your Name..."
+            placeholder="ENTER NAME"
+            placeholderTextColor="#9CA3AF"
             value={name}
             onChangeText={setName}
-            placeholderTextColor="#94a3b8"
+            autoCapitalize="none"
+            keyboardType="default"
+            returnKeyType="next"
           />
         </View>
 
-        <View style={styles.inputWrap}>
-          <Lock size={18} color="#64748b" />
+        <View style={styles.inputGroup}>
+          <Text style={styles.label}>Password</Text>
           <TextInput
             style={styles.input}
-            placeholder="Enter Your Password"
+            placeholder="Enter your password"
+            placeholderTextColor="#9CA3AF"
             value={password}
             onChangeText={setPassword}
             secureTextEntry
-            placeholderTextColor="#94a3b8"
+            autoCapitalize="none"
+            returnKeyType="done"
           />
         </View>
 
-        <Pressable style={styles.button} onPress={handleLogin}>
+        <TouchableOpacity style={styles.buttonPrimary} onPress={handleLogin}>
           <Text style={styles.buttonText}>Login</Text>
-        </Pressable>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.buttonSecondary} onPress={handleBiometricLogin}>
+          <Text style={styles.buttonSecondaryText}>Login with Biometrics</Text>
+        </TouchableOpacity>
       </View>
     </View>
-  );
-};
+  )
+}
 
-export default Login;
+export default Login
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8fafc',
+    backgroundColor: '#0B1120',
+    padding: 24,
     justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 24,
   },
   card: {
-    width: '100%',
-    backgroundColor: '#fff',
+    backgroundColor: '#111827',
     borderRadius: 24,
     padding: 24,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 12 },
-    shadowOpacity: 0.08,
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.18,
     shadowRadius: 20,
-    elevation: 5,
+    elevation: 8,
   },
-  iconWrap: {
-    width: 54,
-    height: 54,
-    borderRadius: 16,
-    backgroundColor: '#eff6ff',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 14,
-  },
-  heading: {
+  title: {
     fontSize: 28,
     fontWeight: '800',
-    color: '#0f172a',
-    marginBottom: 6,
+    color: '#F8FAFC',
+    marginBottom: 8,
   },
-  subText: {
-    fontSize: 14,
-    color: '#64748b',
-    marginBottom: 20,
+  subtitle: {
+    fontSize: 15,
+    color: '#9CA3AF',
+    marginBottom: 24,
   },
-  inputWrap: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#f8fafc',
-    borderRadius: 14,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    marginBottom: 12,
-    borderWidth: 1,
-    borderColor: '#e2e8f0',
+  inputGroup: {
+    marginBottom: 18,
+  },
+  label: {
+    color: '#E5E7EB',
+    marginBottom: 8,
+    fontSize: 13,
+    fontWeight: '600',
   },
   input: {
-    flex: 1,
-    marginLeft: 8,
-    fontSize: 15,
-    color: '#0f172a',
-  },
-  button: {
-    backgroundColor: '#2563eb',
-    width: '100%',
-    height: 50,
+    backgroundColor: '#1F2937',
+    color: '#F8FAFC',
     borderRadius: 14,
-    justifyContent: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    fontSize: 16,
+    borderWidth: 1,
+    borderColor: '#374151',
+  },
+  buttonPrimary: {
+    backgroundColor: '#2563EB',
+    borderRadius: 16,
+    paddingVertical: 16,
     alignItems: 'center',
-    marginTop: 10,
+    marginTop: 8,
   },
   buttonText: {
-    color: '#ffffff',
+    color: '#FFFFFF',
     fontSize: 16,
     fontWeight: '700',
   },
-});
+  buttonSecondary: {
+    marginTop: 12,
+    borderWidth: 1,
+    borderColor: '#374151',
+    borderRadius: 16,
+    paddingVertical: 16,
+    alignItems: 'center',
+  },
+  buttonSecondaryText: {
+    color: '#D1D5DB',
+    fontSize: 15,
+    fontWeight: '600',
+  },
+})
