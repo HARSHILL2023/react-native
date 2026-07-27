@@ -90,7 +90,7 @@ export default function DrawerLayout() {
         <Drawer.Screen
           name="(tabs)"
           options={{
-            title: 'Vico Tabs',
+            title: 'MY Tabs',
             drawerIcon: ({ color, size }) => (
               <IconSymbol size={size ?? 24} name="house.fill" color={color} />
             ),
@@ -117,7 +117,7 @@ export default function DrawerLayout() {
         <Drawer.Screen
           name="new_tab"
           options={{
-            title: 'Vico',
+            title: 'my',
             drawerIcon: ({ color, size }) => (
               <IconSymbol size={size ?? 24} name="house.fill" color={color} />
             ),
