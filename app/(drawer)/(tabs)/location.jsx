@@ -42,7 +42,7 @@ export default function LocationScreen() {
         <View style={styles.locationBox}>
           <Text style={styles.text}>
             Latitude: {location.coords.latitude.toFixed(6)}
-          </Text>
+          </Text> 
           <Text style={styles.text}>
             Longitude: {location.coords.longitude.toFixed(6)}
           </Text>
