@@ -7,7 +7,7 @@ const map = () => {
     const[longitude,setlongitude]=useState(null);
     // const handleGetadress=async()=>{
     //     const permission=await Location.requestForegroundPermissionsAsync()
-      
+
     //     if(!permission?.granted){
     //         alert("permission denied")
     //         return;
@@ -30,7 +30,7 @@ const map = () => {
       const address = await Location.geocodeAsync("gujrat","ahemdabad")
 
       console.log(address);
-      setlatitude(address[0].latitude)
+     
       setlongitude(address[0].longitude)
     }
   return (
