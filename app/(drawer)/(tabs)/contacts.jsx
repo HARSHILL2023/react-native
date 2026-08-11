@@ -1,76 +1,108 @@
-import { View , Text , Button , StyleSheet , ScrollView , FlatList } from "react-native";
+import {
+  View,
+  Text,
+  Button,
+  StyleSheet,
+  FlatList,
+  Image
+} from "react-native";
+
 import React, { useState } from "react";
 import * as Contacts from "expo-contacts";
 
-const contacts = () => {
+const ContactsScreen = () => {
+  const [contacts, setContacts] = useState([]);
 
-  const [contacts , setCotancts] = useState([]);
 
   const handleRequest = async () => {
     const permission = await Contacts.requestPermissionsAsync();
 
-    if(!permission.granted){
+    if (!permission.granted) {
       alert("First grant Permission");
       return;
     }
 
     console.log(permission);
   };
-  
+
   const handleGetContact = async () => {
-    const getContact = await Contacts.getContactsAsync();
+    const getContact = await Contacts.getContactsAsync({
+        sort:Contacts.SortTypes.FirstName
+    });
+
     setContacts(getContact.data);
+
     console.log(getContact);
+
+    
+        };
+
+  const clearContact = () => {
+    setContacts([]);
   };
 
-  const clearContact = async () => {
-    setContacts([]);
-  }
-
   return (
+    <View style={styles.container}>
 
-    <ScrollView style={styles.container} >
-      <Text style={{justifyContent:"center" , alignItems:"center", fontWeight:"bold"}}>Conatacts</Text>
+      <Text style={styles.title}>Contacts</Text>
+
       <Button title="Request" onPress={handleRequest} />
-      <View style={{height:40}} />
+
+      <View style={{ height: 20 }} />
+
       <Button title="Contacts" onPress={handleGetContact} />
-      <Button title="clear" onPress={clearContact} />
 
+      <View style={{ height: 20 }} />
 
-      // Using Map
+      <Button title="Clear" onPress={clearContact} />
 
-      {/* {contacts.map((contacts) => (
-        <View key={contacts.id} > 
-          <Text>Name : {contacts.name}</Text>
-          <Text>Number : {contacts.phoneNumbers?.[0]?.number}</Text>
-        </View>
-      ))} */}
-
-      // using Flatlist - only load Ui when scroll load more
+     
 
       <FlatList
-        data = {contacts}
-        keyExtractor = {(item) => item.id}
-        renderItem = {({ item }) => (
-          <View> 
-          <Text>Name : {item.name}</Text>
-          <Text>Number : {item.phoneNumbers?.[0]?.number}</Text>
-        </View>
+        data={contacts}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <View style={styles.contact}>
+            <Text>Name: {item.name}</Text>
+            <Text>Number: {item.phoneNumbers?.[0]?.number || 'No number'}</Text>
+            {
+            item.image && (
+                 <Image style={{width:20,height:30}} source={{uri : item.image.uri}}/>
+                )
+            }
+             {
+            !item.image && (
+                 <Text>{item.name[0]}</Text>
+                )
+            }
+
+           
+          </View>
         )}
       />
 
+    </View>
+  );
+};
 
-    </ScrollView>
-
-  )
-
-}
-
-export default contacts;
+export default ContactsScreen;
 
 const styles = StyleSheet.create({
-  container:{
-    flex:1,
+  container: {
+    flex: 1,
     backgroundColor: "teal",
-  }
+  },
+
+  title: {
+    fontWeight: "bold",
+    fontSize: 20,
+    textAlign: "center",
+    margin: 20,
+  },
+
+  contact: {
+    backgroundColor: "white",
+    padding: 10,
+    margin: 5,
+  },
 });
