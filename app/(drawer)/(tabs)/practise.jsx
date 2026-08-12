@@ -1,102 +1,85 @@
-import { Alert, StyleSheet, Text, View, Button } from 'react-native'
-import React, { useEffect, useRef, useState } from 'react'
-import * as Location from "expo-location"
-import MapView, { Marker } from 'react-native-maps'
-
+import { StyleSheet, Text, View,Button, FlatList,Image } from 'react-native'
+import React, { useState } from 'react'
+import * as Contacts from "expo-contacts";
 const practise = () => {
-    const [location, setLocation] = useState(null);
-    const [lastlocation, setlastLocation] = useState(null);
-    const [crrlocation, setcrrlocation] = useState(null);
+    const [contact, setContacts] = useState(null);
 
 
-    async function handlepermission() {
-        const permission = await Location.requestForegroundPermissionsAsync();
+    const getpermision = async () => {
+        const permission = await Contacts.requestPermissionsAsync()
+
         if (!permission.granted) {
-            Alert.alert("request denied");
+            alert("Permission required first")
             return;
         }
 
-    }
-    async function hanleloaction() {
-        const crrlocation = await Location.getCurrentPositionAsync();
-
-        if (crrlocation) {
-            setLocation(crrlocation.coords)
-        }
+        alert("permission grandted");
 
     }
 
-    async function lastLocation() {
-        const lstlocation = await Location.getLastKnownPositionAsync();
-        if (lstlocation) {
-            setlastLocation(lstlocation.coords);
-        }
-        else {
-            console.log("no last location is find")
-        }
+    const getContact = async () => {
 
+        const contact = await Contacts.getContactsAsync({
+            sort: Contacts.SortTypes.FirstName
+        })
 
+        setContacts(contact.data);
     }
 
-    const statref = useRef(null);
 
-
-    async function handlestart() {
-        const permission = await Location.requestForegroundPermissionsAsync();
-        if (!permission.granted) {
-            return;
-        }
-        statref.current = await Location.watchPositionAsync({
-            accuracy: Location.Accuracy.Highest,
-            timeInterval: 2000,
-            distanceInterval: 1
-        }, (crrlocation) => {
-            setcrrlocation(crrlocation.coords)
-        });
-    }
-
-    async function handlestop() {
-        if (statref.current) {
-            statref.current.remove();
-            statref.current = null;
-        }
-    }
-    useEffect(() => {
-        handlepermission()
-        hanleloaction()
-        lastLocation()
-
-    }, [])
     return (
-        <View style={{ flex: 1 }}>
-            <Button title='start tracking' onPress={handlestart} />
-            <Button title='stop tracking' onPress={handlestop} />
-            <Text style={{ flex: 1, color: "white" }}>{location?.latitude}</Text>
-            <Text style={{ flex: 1, color: "white" }}>{lastlocation?.latitude}</Text>
-            <Text style={{ flex: 1, color: "white" }}>{crrlocation?.latitude}</Text>
-           {location && (
-  <MapView
-    style={{ flex: 1 }}
-    region={{
-      latitude: location.latitude,
-      longitude: location.longitude,
-      latitudeDelta: 0.01,
-      longitudeDelta: 0.01,
-    }}
-  >
-    <Marker
-      coordinate={{
-        latitude: location.latitude,
-        longitude: location.longitude,
-      }}
-    />
-  </MapView>
-)}
+        <View style={styles.container}>
+       
+             <Text style={styles.title}>Contacts</Text>
+       
+             <Button title="Request" onPress={getpermision} />
+       
+             <View style={{ height: 20 }} />
+       
+             <Button title="Contacts" onPress={getContact} />
+       
+             <View style={{ height: 20 }} />
 
-        </View>
+             <FlatList 
+             data={contact}
+             keyExtractor={(item)=>item.id}
+             renderItem={({item})=>(
+                <View>
+                    <Text>{item.name}</Text>
+                    <Text>{item?.phoneNumber?.[0]?.number || "no number" }</Text>
+                    <Text>{item.image && (
+                        <View>
+                            <Image style={{height:20,width:20}} source={{uri: item.image.uri}}/>
+                        </View>
+                    ) }</Text>
+                    
+
+                </View>
+             )}
+             />
+             </View>
+        
     )
 }
 
 export default practise
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "teal",
+  },
+
+  title: {
+    fontWeight: "bold",
+    fontSize: 20,
+    textAlign: "center",
+    margin: 20,
+  },
+
+  contact: {
+    backgroundColor: "white",
+    padding: 10,
+    margin: 5,
+  },
+});
