@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Button, FlatList, Image, TextInput, Pressable } from 'react-native'
+import { StyleSheet, Text, View, Button, FlatList, Image, TextInput, Pressable, Alert } from 'react-native'
 import React, {useState } from 'react'
 import * as Contacts from "expo-contacts"
 
@@ -30,8 +30,16 @@ const ContactsApp = () => {
   }
 
 
-  const deleteContact = (id) => {
-    setAllContacts(prev => prev.filter(c => c.id !== id));
+  const deleteContact = (item) => {
+        Alert.alert("Delete Contact",`Are you sure,delete this contact ${item.name}?`),
+        [{text:"cancel",style:"cancel"},
+          {text:"Delete",style:"destructive",onclick:async ()=>{
+            await Contacts.removeContactAsync(item.id)
+            setAllContacts((prev)=>prev.filter((ele)=>ele.id!==item.id));
+          }
+          }]
+
+
   };
 
   const handleSearchContacts = allContacts.filter((ele) => {
