@@ -3,24 +3,45 @@ import React, { useState } from 'react';
 import * as Clipboard from 'expo-clipboard';
 
 const ClipboardExample = () => {
+     const [image, setImage] = useState(null);
     const [text, settext] = useState(null);
     const [copied, setcopied] = useState(null);
     const handleCopyText = async () => {
         await Clipboard.setStringAsync(text);
         console.log({ text });
     };
+    const pasteImage = async () => {
+
+        const hasImage =
+            await Clipboard.hasImageAsync();
+
+        if (!hasImage) {
+
+            return;
+
+        }
+
+        const result =
+            await Clipboard.getImageAsync({
+                format: "png",
+            });
+
+        setImage(result);
+
+    };
+
     const handleGetCopiedText = async () => {
-        const check=await Clipboard.hasStringAsync();
+        const check = await Clipboard.hasStringAsync();
         const res = await Clipboard.getStringAsync();
 
-        if(check){
-             setcopied(res);
+        if (check) {
+            setcopied(res);
         }
-        else{
+        else {
             alert("nothing to paste")
         }
         console.log(res);
-       
+
     }
 
     return (
