@@ -102,7 +102,7 @@
 
 //             {/* <Text style={{fontWeight:"bold"}} > Saved Location </Text> */}
 
-//             {/* {saveLocation && (
+//             {saveLocation && (
 //                 <View> 
 //                 <Text>
 //                     Latitude : {saveLocation.latitude}
@@ -116,7 +116,7 @@
 //                     Accuracy : {saveLocation.accuracy}
 //                 </Text>
 //             </View>
-//             )} */}
+//             )} 
 
 //             <Button title="Clear Location" onPress={()=> setLocation(null)} />
 

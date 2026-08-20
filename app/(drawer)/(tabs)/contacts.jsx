@@ -67,7 +67,7 @@ const ContactsApp = () => {
       <FlatList
         data={handleSearchContacts}
         keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
+        renderItem={({ item }) => ( 
           <View style={styles.itemBox}>
             <View style={styles.contactDetails}>
               {

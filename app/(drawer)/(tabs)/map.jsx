@@ -5,26 +5,26 @@
 //     const[data,setdata]=useState(null);
 //     const[latitude,setlatitude]=useState(null);
 //     const[longitude,setlongitude]=useState(null);
-//     // const handleGetadress=async()=>{
-//     //     const permission=await Location.requestForegroundPermissionsAsync()
+//     const handleGetadress=async()=>{
+//         const permission=await Location.requestForegroundPermissionsAsync()
 
-//     //     if(!permission?.granted){
-//     //         alert("permission denied")
-//     //         return;
-//     //     }
+//         if(!permission?.granted){
+//             alert("permission denied")
+//             return;
+//         }
 
-//     //     const currentLocation=await Location.getCurrentPositionAsync();
-//     //     console.log(currentLocation);
-//     //     const getAddress=await Location.reverseGeocodeAsync({
-//     //       latitude:currentLocation.coords.latitude,
-//     //       longitude:currentLocation.coords.longitude
-//     //     })
-//     //    setdata(getAddress[0])
-//     //    console.log(getAddress[0])
+//         const currentLocation=await Location.getCurrentPositionAsync();
+//         console.log(currentLocation);
+//         const getAddress=await Location.reverseGeocodeAsync({
+//           latitude:currentLocation.coords.latitude,
+//           longitude:currentLocation.coords.longitude
+//         })
+//        setdata(getAddress[0])
+//        console.log(getAddress[0])
 
         
        
-//     //   }
+//       }
 
 //     const handleGetadress=async()=>{
 //       const address = await Location.geocodeAsync("gujrat","ahemdabad")
