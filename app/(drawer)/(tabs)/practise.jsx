@@ -1,27 +1,24 @@
-import { Button, StyleSheet, Text, View } from 'react-native'
-import React, { useRef, useState } from 'react'
-import {CameraView,useCameraPermission} from "expo-camera";
+import { View, Button } from "react-native";
+import { Linking } from "react-native";
 
-const Practise = () => {
+export default function App() {
 
-    const [cameraPermission,requestCameraPermission]=useCameraPermission();
-    
-    if(!cameraPermission?.granted){
-        return(
-            <View>
-                    <Button title='grant permission' onPress={requestCameraPermission}/>
+  const makeCall = () => {
+    Linking.openURL("tel:9876543210");
+  };
 
-            </View>
-        )
-    }
-    const cameraRef=useRef(null);
   return (
-    <View style={{flex:1}}>
-    <CameraView style={{flex:1}} ref={cameraRef}/>
+    <View
+      style={{
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <Button
+        title="Call"
+        onPress={makeCall}
+      />
     </View>
-  )
+  );
 }
-
-export default Practise
-
-const styles = StyleSheet.create({})
