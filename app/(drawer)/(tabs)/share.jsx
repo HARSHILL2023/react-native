@@ -17,7 +17,7 @@ const Sharee = () => {
         if (!mssg.trim()) return;
 
         await Share.share({
-            message: `Check this website: https://example.com `,
+            message: mssg,
         });
     };
 
