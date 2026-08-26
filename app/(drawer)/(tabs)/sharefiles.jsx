@@ -8,7 +8,6 @@ const share = () => {
     const shareFile=async()=>{
         const res= await DocumentPicker.getDocumentAsync({
         type: "*/*",
-        copyToCacheDirectory: true,
       });
         
     if (res.canceled) {
