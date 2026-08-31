@@ -35,7 +35,7 @@ const Noti = () => {
       trigger: {
         type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL,
         seconds: 1,
-        repeats:true,
+        repeats:false,
       },
     });
     console.log(check)
