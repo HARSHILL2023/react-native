@@ -1,98 +1,77 @@
-import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
+import { StyleSheet, Text, View, Button } from 'react-native';
 import React, { useState } from 'react';
-import * as Notification from 'expo-notifications';
+import * as Notifications from 'expo-notifications';
 
-Notification.setNotificationHandler({
+Notifications.setNotificationHandler({
   handleNotification: async () => ({
-    shouldShowAlert: true,
     shouldPlaySound: true,
     shouldSetBadge: true,
-    shouldShowBanner:true,
+    shouldShowBanner: true,
+    shouldShowList: true,
   }),
 });
 
+
 const Noti = () => {
-  const [time, settime] = useState('');
-  const [title, settitle] = useState('');
-  const [desc, setdesc] = useState('');
 
-  const handleNoti = async () => {
-    const perm = await Notification.requestPermissionsAsync();
+  const[id,setid]=useState(null);
+  const PushNotification = async () => {
 
-    if (!perm.granted) {
-      alert('Permission denied');
+   
+    const permission = await Notifications.requestPermissionsAsync();
+
+    if (!permission.granted) {
+      alert("Permission is not given");
       return;
     }
 
-    await Notification.scheduleNotificationAsync({
+    
+    const check=await Notifications.scheduleNotificationAsync({
       content: {
-        title: title || 'Default Title',
-        body: desc || 'Default Body',
+        title: "Kam Kar Taru",
+        body: "Hello",
       },
+
       trigger: {
-        type: 'timeInterval',   
-        seconds: parseInt(time) || 5, 
-        repeats: false,         
-      },        
+        type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL,
+        seconds: 1,
+        repeats:true,
+      },
     });
+    console.log(check)
+    if(check){
+    setid(check);
+    }
+    alert("Notification scheduled!");
   };
 
+  const cancelPushNotification=async()=>{
+    await Notifications.cancelScheduledNotificationAsync(id);
+  }
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>📢 Notification Scheduler</Text>
+    <View
+      style={{
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'pink',
+      }}
+    >
+      <Text>Notification</Text>
 
-      <TextInput
-        placeholder="Enter title"
-        value={title}
-        onChangeText={settitle}
-        style={styles.input}
+      <Button
+        title="Schedule Notification"
+        onPress={PushNotification}
       />
 
-      <TextInput
-        placeholder="Enter time (seconds)"
-        value={time}
-        onChangeText={settime}
-        style={styles.input}
-        keyboardType="numeric"
+       <Button
+        title="Cancle Notification"
+        onPress={cancelPushNotification}
       />
-
-      <TextInput
-        placeholder="Enter body"
-        value={desc}
-        onChangeText={setdesc}
-        style={styles.input}
-      />
-
-      <View style={{ marginTop: 20 }}>
-        <Button title="Schedule Notification" onPress={handleNoti} />
-      </View>
     </View>
   );
 };
 
 export default Noti;
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-    backgroundColor: '#f5f5f5',
-  },
-  header: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    color: '#333',
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 8,
-    padding: 10,
-    marginVertical: 8,
-    width: '80%',
-    backgroundColor: '#fff',
-  },
-});
+const styles = StyleSheet.create({});
