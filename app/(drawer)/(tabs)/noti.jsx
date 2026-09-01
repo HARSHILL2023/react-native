@@ -14,19 +14,20 @@ Notifications.setNotificationHandler({
 
 const Noti = () => {
 
-  const[id,setid]=useState(null);
+  const [id, setid] = useState(null);
   const PushNotification = async () => {
 
-   
-    const permission = await Notifications.requestPermissionsAsync();
+
+    const permission = await Notifications.getPermissionsAsync();
 
     if (!permission.granted) {
       alert("Permission is not given");
+      await Notifications.requestPermissionsAsync()
       return;
     }
 
-    
-    const check=await Notifications.scheduleNotificationAsync({
+
+    const check = await Notifications.scheduleNotificationAsync({
       content: {
         title: "Kam Kar Taru",
         body: "Hello",
@@ -35,17 +36,17 @@ const Noti = () => {
       trigger: {
         type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL,
         seconds: 1,
-        repeats:false,
+        repeats: false,
       },
     });
     console.log(check)
-    if(check){
-    setid(check);
+    if (check) {
+      setid(check);
     }
     alert("Notification scheduled!");
   };
 
-  const cancelPushNotification=async()=>{
+  const cancelPushNotification = async () => {
     await Notifications.cancelScheduledNotificationAsync(id);
   }
   return (
@@ -64,7 +65,7 @@ const Noti = () => {
         onPress={PushNotification}
       />
 
-       <Button
+      <Button
         title="Cancle Notification"
         onPress={cancelPushNotification}
       />
