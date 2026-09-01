@@ -1,48 +1,78 @@
-import { StyleSheet, Text, View ,Share, Button} from 'react-native'
-import React, { useState } from 'react'
-import * as Sharing from "expo-sharing";
-import * as ImagePicketr from "expo-image-picker";
-import * as DocumentPicker from "expo-document-picker";
-const practise = () => {
-  
-  const handletextShare=async()=>{
-    Share.share({
-      message:`anand ko kuch nahi ata`
-    });
-  }
+// import {View,Text, Button} from "react-native";
+// import  AsyncStorage from "@react-native-async-storage/async-storage"
+// const practise=()=>{
+//     const handleSetData = async()=>{
+//       await AsyncStorage.setItem('name','harshil');
+//       console.log("data saved succesfully");
+//     }
+//     const handleGetdata=async()=>{
+//      const res=await AsyncStorage.getItem('name');
+//       console.log(res);
+//     }
+//     const handledeletedata=async()=>{
+//       await AsyncStorage.removeItem('name');
+//       console.log("data deleted succesfully");
+//         }
 
-  const handleImageShare=async()=>{
-    const res=await ImagePicketr.launchImageLibraryAsync({
-      mediaTypes:["images"],
-      allowsEditing:false,
-      quality:1,
-    });
 
-    if(res.canceled){
-      return;
-    }
 
-    Sharing.shareAsync(res.assets[0].uri)
-  }
-  const handlefileShare=async()=>{
-    const res=DocumentPicker.getDocumentAsync({
-      type:"*/*"
-    })
-    if(res.canceld){
-      return;
-    }
-    await Sharing.shareAsync(res.assets[0].uri);
-  }
+//   return (
+//     <View>
+//       <Button title="set data" onPress={handleSetData}/>
+//       <Button title="get data" onPress={handleGetdata}/>
+//     </View>
+//   )
+// }
+
+
+
+
+import { View, Text, Button, TextInput } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useState } from "react";
+
+const Practise = () => {
+
+  const [key, setKey] = useState("");
+  const [value, setValue] = useState("");
+
+  const handleSetData = async () => {
+    await AsyncStorage.setItem(key, value);
+    console.log("data saved successfully");
+  };
+
+  const handleGetdata = async () => {
+    const res = await AsyncStorage.getItem(key);
+    console.log(res);
+  };
+
+  const handledeletedata = async () => {
+    await AsyncStorage.removeItem(key);
+    console.log("data deleted successfully");
+  };
+
   return (
-    <View style={{flex:1}}>
-      <Text>Share</Text>
-      <Button onPress={handletextShare} title='share text'/> 
-      <Button onPress={handleImageShare} title='share photo'/> 
-      <Button onPress={handlefileShare} title='share file'/> 
-         </View>
-  )
-}
+    <View>
 
-export default practise
+      <TextInput
+        placeholder="Enter key"
+        value={key}
+        onChangeText={setKey}
+      />
 
-const styles = StyleSheet.create({})
+      <TextInput
+        placeholder="Enter value"
+        value={value}
+        onChangeText={setValue}
+      />
+
+      <Button title="Set Data" onPress={handleSetData} />
+      <Button title="Get Data" onPress={handleGetdata} />
+      <Button title="Delete Data" onPress={handledeletedata} />
+
+    </View>
+  );
+};
+
+export default Practise;
+
