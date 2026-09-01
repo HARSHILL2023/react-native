@@ -1,38 +1,94 @@
-import { Button, StyleSheet, Text, View, TextInput } from 'react-native';
-import React, { useState } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  Button,
+} from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const AsyncStorageExample = () => {
-  const [data, setData] = useState('');
-  const [getData, setGetData] = useState('');
+export default function App() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [age, setAge] = useState("");
 
   const saveData = async () => {
-    await AsyncStorage.setItem('key', data);
+   
+    const user = {
+      name: name,
+      email: email,
+      age: age,
+    };
+
+    const stringData = JSON.stringify(user);
+
+    
+    await AsyncStorage.setItem("user", stringData);
+
+    console.log("Data saved");
   };
 
-  const getStoredData = async () => {
-    const value = await AsyncStorage.getItem('key');
-    setGetData(value);
+  const getData = async () => {
+   
+    const data = await AsyncStorage.getItem("user");
+
+    if (data) {
+     
+      const user = JSON.parse(data);
+
+      console.log("Name:", user.name);
+      console.log("Email:", user.email);
+      console.log("Age:", user.age);
+    }
   };
 
   return (
-    <View>
-      <Text>Hello</Text>
+    <View style={{ padding: 40, gap: 15 }}>
 
+      <Text>Name</Text>
       <TextInput
-        placeholder="Enter data"
-        onChangeText={setData}
+        placeholder="Enter name"
+        value={name}
+        onChangeText={setName}
+        style={{
+          borderWidth: 1,
+          padding: 10,
+        }}
       />
 
-      <Button title="Set Data" onPress={saveData} />
+      <Text>Email</Text>
+      <TextInput
+        placeholder="Enter email"
+        value={email}
+        onChangeText={setEmail}
+        style={{
+          borderWidth: 1,
+          padding: 10,
+        }}
+      />
 
-      <Button title="Get Data" onPress={getStoredData} />
+      <Text>Age</Text>
+      <TextInput
+        placeholder="Enter age"
+        value={age}
+        onChangeText={setAge}
+        keyboardType="numeric"
+        style={{
+          borderWidth: 1,
+          padding: 10,
+        }}
+      />
 
-      <Text>{getData}</Text>
+      <Button
+        title="Save Data"
+        onPress={saveData}
+      />
+
+      <Button
+        title="Get Data"
+        onPress={getData}
+      />
+
     </View>
   );
-};
-
-export default AsyncStorageExample;
-
-const styles = StyleSheet.create({});
+}
