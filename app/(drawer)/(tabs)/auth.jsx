@@ -2,7 +2,7 @@ import { Button, StyleSheet, Text, View, TextInput, Alert } from 'react-native';
 import React, { useState } from 'react';
 import * as LocalAuth from "expo-local-authentication";
 import * as SecureStore from "expo-secure-store";
-import {router} from "expo-router";
+import { router } from "expo-router";
 const Auth = () => {
     const [username, setUserName] = useState('');
     const [password, setPassword] = useState('');
@@ -16,44 +16,49 @@ const Auth = () => {
             Alert.alert("Error", "invalid admin or password")
         }
     };
-    const handleBiometric=async()=>{
-        const token=await SecureStore.getItemAsync("token")
-        const bimoetric=await SecureStore.getItemAsync("biometric")
+    const handleBiometric = async () => {
+        const token = await SecureStore.getItemAsync("token")
+        const bimoetric = await SecureStore.getItemAsync("biometric")
 
-        if(!token || bimoetric!=="true"){
-            Alert.alert("succes","Login with emial and password first");
+        if (!token || bimoetric !== "true") {
+            Alert.alert("succes", "Login with emial and password first");
             return;
         }
 
         const hasHardware = await LocalAuth.hasHardwareAsync();
 
-        if(!hasHardware){
+        if (!hasHardware) {
             alert("buy a expensive phone ");
             return;
 
         }
-        const ischeck= LocalAuth.isEnrolledAsync();
+        const ischeck = LocalAuth.isEnrolledAsync();
 
-        if(!ischeck){
+        if (!ischeck) {
             alert("buy a new expensive phone ")
             return;
         }
-        const res=await LocalAuth.authenticateAsync({
-            promptMessage:"Login wiht message"
+        const res = await LocalAuth.authenticateAsync({
+            promptMessage: "Login wiht message"
         })
 
-        if(res.success){
+        if (res.success) {
             router.replace("/");
         }
     }
+    const handleClick = async () => {
+        const types =
+            await LocalAuth.getEnrolledLevelAsync()
 
+        console.log(types);
+    }
 
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Biometric Login</Text>
 
 
- 
+
             <TextInput
 
 
@@ -77,8 +82,11 @@ const Auth = () => {
             <View>
                 <Button title="Authenticate" onPress={handlelogin} color="#5b5e5d" />
             </View>
-             <View>
+            <View>
                 <Button title="Biometric" onPress={handleBiometric} color="#2410ac" />
+            </View>
+              <View>
+                <Button title="click me " onPress={handleClick} color="#2410ac" />
             </View>
         </View>
     );
