@@ -7,6 +7,8 @@ export default function network() {
     const state=Network.useNetworkState();
     const handleGetNetwork =async () => { 
         const res=Network.getIpAddressAsync();
+        const air =await Network.isAirplaneModeEnabledAsync();
+        console.log(air);
         console.log(res);
         if(res){
             setip(res);
