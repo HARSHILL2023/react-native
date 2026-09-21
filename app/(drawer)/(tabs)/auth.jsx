@@ -39,7 +39,7 @@ const Auth = () => {
             return;
         }
         const res = await LocalAuth.authenticateAsync({
-            promptMessage: "Login wiht message"
+            promptMessage: "Login with Biomteric"
         })
 
         if (res.success) {

@@ -1,86 +1,83 @@
 import { useState } from "react";
-import { View, Text, Button, Alert, TextInput, StyleSheet } from "react-native";
+import { View, Text, Button, TextInput, StyleSheet } from "react-native";
 import * as SecureStore from "expo-secure-store";
 import * as LocalAuth from "expo-local-authentication";
 import { router } from "expo-router";
-const App = () => {
-  const [name, setName] = useState("");
-  const [pass, setPass] = useState("");
 
-  const login = async () => {
-    if (name === "harshil" && pass === "1234") {
-      await SecureStore.setItemAsync("token", "harshil");
-      await SecureStore.setItemAsync("biometric", "true");
-      Alert.alert("Success", "You are logged in!");
+const Login = () => {
+  const [name, setname] = useState(null);
+  const [pass, setpass] = useState(null);
+
+  const handleLogin = async () => {
+    if (name == "harshil" && pass == "123") {
+      await SecureStore.setItemAsync("name", "harshil");
+      await SecureStore.setItemAsync("biomteric", "true");
+      alert("logined")
     } else {
-      Alert.alert("Failed", "Wrong username or password");
+      alert("name or pass is wrong check again");
     }
   };
 
-  const biometric = async()=>{
-    const name=await SecureStore.getItemAsync("token");
-    const cbiometric= await SecureStore.getItemAsync("biometric");
+  const handleBiomrtic = async () => {
+    const token = await SecureStore.getItemAsync("name");
+    const check = await SecureStore.getItemAsync("Biometric");
 
-    if(!name ||  cbiometric!=="true"){
-      alert("please login with email  first");
-      return;
+    if (!token || check != "true") {
+      alert("something went wrong");
     }
 
-    
-    
-    const checkhardware=await LocalAuth.hasHardwareAsync();
-
-    if(!checkhardware){
+    const hardware = await LocalAuth.hasHardwareAsync();
+    if (!hardware) {
       alert("buy a new phone");
       return;
     }
-     const check= await LocalAuth.isEnrolledAsync();
 
-     if(!check){
+    const isavailable = await LocalAuth.isEnrolledAsync();
+    if (!isavailable) {
       alert("buy a new phone");
       return;
-     }
+    }
 
-     const checkbiometric=await LocalAuth.authenticateAsync({
-      promptMessage:"login with biometric"
-     });
+    const auth = await LocalAuth.authenticateAsync({
+      promptMessage: "biometric login",
+    });
 
-     if(checkbiometric.success){
-      alert("login succesfully done");
-      router.replace('/');
-     }
-
-
-  }
+    if (auth.success) {
+      router.replace("/home");
+    }
+  };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>🔐 Secure Login</Text>
+      <Text style={styles.title}>🔐 Login</Text>
 
       <TextInput
         placeholder="Enter your name"
-        onChangeText={setName}
-        value={name}
+        onChangeText={setname}
         style={styles.input}
       />
-
       <TextInput
         placeholder="Enter your password"
-        onChangeText={setPass}
-        value={pass}
-        secureTextEntry
+        onChangeText={setpass}
         style={styles.input}
+        secureTextEntry
       />
 
       <View style={styles.buttonContainer}>
-        <Button title="Login" onPress={login} color="#4A90E2" />
-        <Button title="BIOMETRIC" onPress={biometric} color="#4A90E2" />
+        <Button title="Verify Login" onPress={handleLogin} color="#4A90E2" />
+      </View>
+      <View style={styles.buttonContainer}>
+        <Button
+          title="Login with Biometric"
+          onPress={handleBiomrtic}
+          color="#4A90E2"
+        />
       </View>
     </View>
   );
 };
 
-export default App;
+export default Login;
 
 const styles = StyleSheet.create({
   container: {
@@ -107,7 +104,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   buttonContainer: {
-    marginTop: 20,
+    marginTop: 15,
     width: "90%",
     borderRadius: 8,
     overflow: "hidden",
