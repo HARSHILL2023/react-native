@@ -27,9 +27,9 @@ const Login = () => {
     }
 
     const hardware = await LocalAuth.hasHardwareAsync();
-    if (!hardware) {
+    if (!hardware) {  
       alert("buy a new phone");
-      return;
+      return;   
     }
 
     const isavailable = await LocalAuth.isEnrolledAsync();

@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import { View, Text, Pressable,Alert } from "react-native";
 
 function home() {
     return (
@@ -6,7 +6,9 @@ function home() {
             flex: 1, backgroundColor: "red",
             justifyContent: "center", alignItems: "center"
         }}>
-            <Text style={{fontSize:50}}>hello</Text>
+           <Pressable onPress={()=>Alert.alert("hello","my name is harshil")}>
+            <Text>click me</Text>
+           </Pressable>
 
             
         </View>

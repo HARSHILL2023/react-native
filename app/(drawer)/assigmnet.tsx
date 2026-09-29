@@ -4,7 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 const Profile = () => {
   const handleFollow = () => {
-    Alert.alert("Success", "You are now following John Doe!");
+    Alert.alert("Success", "You are now following Harshil!");
   };
 
   return (
