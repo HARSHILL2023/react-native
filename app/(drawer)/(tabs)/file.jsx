@@ -1,51 +1,35 @@
-import { StyleSheet, Text, View, Pressable } from 'react-native'
+import { Button, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-  import { Paths,File,Directory } from "expo-file-system"
-
-
+import { Paths, File, Directory } from "expo-file-system";
 const file = () => {
 
-  const handlefile = () => {
-    
-  const newFolder=new Directory (Paths.document,"image")
+  const handleClick = async() => {
 
-  console.log(newFolder);
 
-  newFolder.create({idempotent:true});
+    const obj={
+      mssg:"hello back"
+    }
+    const file = new File(Paths.document, "notes.txt");
 
-  const newFile=new File(newFolder,"thuu");
+    if (!file.exists) {
+      file.create
+    }
 
-  console.log(newFile.uri);
-  
-  try {
-  const contents = newFolder.list();
-  console.log(contents);
-      }
- catch (error) {
-  console.error(error);
-}
-  
-} 
-  
+    file.write(JSON.stringify(obj));
+
+    const res=await file.text();
+
+    console.log(res);
+    console.log(JSON.parse(res));
+    console.log(typeof(res));
+  }
   return (
-
-    <View style={styles.view} >
-      <Text>File system</Text>
-      <Pressable onPress={handlefile} style={{ flex: 1, backgroundColor: "black", color: "white", height: 0.2 }}>
-        <Text style={{ color: "white" }}>dont click here</Text>
-      </Pressable>
+    <View>
+      <Button onPress={handleClick} title='create the file and indert text'/>
     </View>
-
-  ) 
+  )
 }
 
 export default file
 
-const styles = StyleSheet.create({
-  view: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "green"
-  }
-})
+const styles = StyleSheet.create({})
