@@ -28,7 +28,7 @@
 //   },
 //   container: {
 //     flex: 1,
-//     justifyContent: "center",
+//        ustifyContent: "center",
 //     alignItems: "center",
 //     backgroundColor: "white",
 //   },
