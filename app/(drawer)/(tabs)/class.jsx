@@ -1,26 +1,26 @@
-import { useState } from "react"
-import { View,Text, Button, FlatList } from "react-native"
+// import { useState } from "react"
+// import { View,Text, Button, FlatList } from "react-native"
 
-const app = ()=>{
-    const[apidata,setapidata]=useState(null);
-    const  fetchdata=async()=>{
-        fetch("api")
-        .then(console.log("api data"))
-        .then((e)=>setapidata(e));
+// const app = ()=>{
+//     const[apidata,setapidata]=useState(null);
+//     const  fetchdata=async()=>{
+//         fetch("api")
+//         .then(console.log("api data"))
+//         .then((e)=>setapidata(e));
 
-    }    
+//     }    
     
-    return(
+//     return(
 
         
-        <View>
-            <Text>APi data</Text>
-            <Button title="fetch api data" onPress={fetchdata}/>
-        <FlatList 
-        data={apidata}
+//         <View>
+//             <Text>APi data</Text>
+//             <Button title="fetch api data" onPress={fetchdata}/>
+//         <FlatList 
+//         data={apidata}
 
-        />
+//         />
 
-        </View>
-    )
-}
+//         </View>
+//     )
+// }
